@@ -1,5 +1,4 @@
 # shell
-shell-tool
  gitlab_batch_clone 能帮我们将指定的仓库一次性clone到本地，支持重复clone
  
  具体用法：
