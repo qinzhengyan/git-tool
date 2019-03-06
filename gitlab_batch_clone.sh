@@ -6,9 +6,35 @@ else
   exit 1;
 fi
 
+if [ $# -eq 0 ]
+  then
+    echo "No arguments,we need two arguments."
+    exit 1;
+fi
 
-TOKEN="REAJ1hpDzwwW2MhtYtwN";
-URL="http://git.dev.yunnex.com/api/v3"
+if [ $# -ne 2 ]
+  then
+    echo "we need only two arguments."
+    exit 1;
+fi
+
+if test -n $1; then
+  echo "private token is :$1"
+else
+  echo "please enter private token."
+  exit 1;
+fi
+
+if test -n $2; then
+  echo "git url is : $2"
+else
+  echo "please enter git url."
+  exit 1
+fi
+
+
+TOKEN=$1;
+URL="$2/api/v3"
 PREFIX="http_url_to_repo"
 
 # check and create group dir
