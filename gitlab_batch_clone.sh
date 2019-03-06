@@ -33,21 +33,21 @@ else
 fi
 
 
-TOKEN=$1;
-URL="$2/api/v3"
-PREFIX="http_url_to_repo"
+token=$1;
+url="$2/api/v3"
+project_repo_url_key="http_url_to_repo"
 
 # check and create group dir
 basepath=$(cd `dirname $0`; pwd)
-groups_ids=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups | jq '.[] | .id')
+groups_ids=$(curl --header "PRIVATE-token: $token" $url/groups | jq '.[] | .id')
 for group_id in $groups_ids
 do
-      group_name=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups/$group_id | jq '.name')
+      group_name=$(curl --header "PRIVATE-token: $token" $url/groups/$group_id | jq '.name')
       group_name=${group_name//'"'/''}	
       mkdir -p $basepath/$group_name
       cd $basepath/$group_name/
       rm -rf *
-      projects=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups/$group_id/projects | jq --arg p "$PREFIX" '.[] | .[$p]')
+      projects=$(curl --header "PRIVATE-token: $token" $url/groups/$group_id/projects | jq --arg p "$project_repo_url_key" '.[] | .[$p]')
       for project in $projects
       do
 	echo "git repo project url is $project"
