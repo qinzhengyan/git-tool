@@ -9,49 +9,56 @@ fi
 if [ $# -eq 0 ]
   then
     echo "No arguments,we need two arguments."
-    exit 1;
+    exit 1
 fi
 
 if [ $# -ne 2 ]
   then
     echo "we need only two arguments."
-    exit 1;
+    exit 1
 fi
 
 if test -n $1; then
-  echo "private token is :$1"
+  echo "private TOKEN is :$1"
 else
-  echo "please enter private token."
-  exit 1;
+  echo "please enter private TOKEN."
+  exit 1
 fi
 
 if test -n $2; then
-  echo "git url is : $2"
+  echo "git URL is : $2"
 else
-  echo "please enter git url."
+  echo "please enter git URL."
+  exit 1
+fi
+
+if curl --output /dev/null --silent --head --fail "$2"; then
+  echo "$2 is up."
+else
+  echo "$2 is down."
   exit 1
 fi
 
 
-token=$1;
-url="$2/api/v3"
-project_repo_url_key="http_url_to_repo"
+TOKEN=$1
+URL="$2/api/v3"
+PROJECT_REPO_URL_KEY="http_url_to_repo"
 
 # check and create group dir
-basepath=$(cd `dirname $0`; pwd)
-groups_ids=$(curl --header "PRIVATE-token: $token" $url/groups | jq '.[] | .id')
-for group_id in $groups_ids
+BASEPATH=$(cd `dirname $0`; pwd)
+GROUP_IDS=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups | jq '.[] | .id')
+for group_id in $GROUP_IDS
 do
-      group_name=$(curl --header "PRIVATE-token: $token" $url/groups/$group_id | jq '.name')
+      group_name=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups/$group_id | jq '.name')
       group_name=${group_name//'"'/''}	
-      mkdir -p $basepath/$group_name
-      cd $basepath/$group_name/
+      mkdir -p $BASEPATH/$group_name
+      cd $BASEPATH/$group_name/
       rm -rf *
-      projects=$(curl --header "PRIVATE-token: $token" $url/groups/$group_id/projects | jq --arg p "$project_repo_url_key" '.[] | .[$p]')
+      projects=$(curl --header "PRIVATE-TOKEN: $TOKEN" $URL/groups/$group_id/projects | jq --arg p "$PROJECT_REPO_URL_KEY" '.[] | .[$p]')
       for project in $projects
       do
 	echo "git repo project url is $project"
-	echo "local git repo dir is $basepath/$group_name/"    
+	echo "local git repo dir is $BASEPATH/$group_name/"    
 	git clone ${project//'"'/''} 
       done 
 done
