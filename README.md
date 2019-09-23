@@ -4,7 +4,7 @@
  具体用法：
 
 ```
-shell>$ git clone https://github.com/qinzhengyan/shell.git
+shell>$ git clone https://github.com/grapeqin/shell.git
 shell>$ cp gitlab_batch_clone.sh <your_dir>
 shell>$ chmod +x gitlab_batch_clone.sh
 shell>$ ./gitlab_batch_clone.sh <private_token>  <git_url>
